@@ -69,7 +69,7 @@ app.get('/full', async (req, res) => {
 
 app.get('/:invalid', async (req, res) => {
   const { invalid } = req.params;
-  res.status(500).send({ error: "Couldn't get your data, sorry" });
+  res.status(404).send({ error: `Route /${invalid} not found` });
 });
 
 /*

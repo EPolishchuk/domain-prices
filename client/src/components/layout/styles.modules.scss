@@ -1,0 +1,41 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 2rem;
+  z-index: 1;
+  width: 100%;
+  background-color: rgb(65, 125, 236);
+  opacity: 0.9;
+  margin-bottom: 1rem;
+
+  ol {
+    display: flex;
+    list-style: none;
+  }
+
+  a {
+    color: #fff;
+    padding: 0.45rem;
+    margin: 0 0.25rem;
+    text-decoration: none;
+    line-height: 1.5rem;
+  }
+
+  a:hover {
+    color: #f4f4f4;
+  }
+
+  .active {
+    border-bottom: 1px solid #fff;
+  }
+
+  h4 {
+    display: inline;
+    color: #fff;
+    font-size: 1.5rem;
+    padding: 0.45rem;
+    margin: 0 0.25rem;
+    line-height: 1rem;
+  }
+}

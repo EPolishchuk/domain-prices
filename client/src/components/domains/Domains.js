@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import punycode from 'punycode';
 import Badge from './Badge';
@@ -40,9 +41,11 @@ const Domains = () => {
             {domains.map((domain, i) => (
               <tr key={i}>
                 <td>
-                  {!domain.name.includes('xn--')
-                    ? domain.name
-                    : punycode.toUnicode(domain.name)}
+                  <NavLink exact to={`/domain/${domain.name}`}>
+                    {!domain.name.includes('xn--')
+                      ? domain.name
+                      : punycode.toUnicode(domain.name)}
+                  </NavLink>
                 </td>
                 {domain.created === null && !domain.name.includes('.') ? (
                   <td colSpan='5'>

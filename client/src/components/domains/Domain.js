@@ -10,7 +10,7 @@ const Domain = (props) => {
   useEffect(() => {
     const fetch = async () => {
       const res = await axios.get(
-        `${process.env.REACT_APP_BASE}/${process.env.REACT_APP_SINGLE_DOMAIN}/${props.match.params.name}`
+        `${process.env.REACT_APP_BASE}/${process.env.REACT_APP_DOMAIN}/${props.match.params.name}`
       );
 
       setDomain(res.data[0]);
@@ -26,7 +26,12 @@ const Domain = (props) => {
       <div className='container'>
         <div className='row'>
           <div className='col-12'>
-            <h2>Domain {domain.name}</h2>
+            <h2>
+              Domain{' '}
+              {!domain.name.includes('xn--')
+                ? domain.name
+                : punycode.toUnicode(domain.name)}
+            </h2>
           </div>
           <div className='col'>
             <h6>Features: </h6>
@@ -43,7 +48,7 @@ const Domain = (props) => {
               <p>
                 <i>
                   {' '}
-                  Domain was created at {domain.created}. Last update in root
+                  Domain was created at {domain.created}. Last updated in root
                   zone at {domain.updated}
                 </i>
               </p>

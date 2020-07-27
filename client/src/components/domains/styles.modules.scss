@@ -1,3 +1,35 @@
+.badge {
+  padding: 1rem;
+  background-color: #e8a93f;
+  color: #0a1237;
+  border-radius: 0.5rem;
+
+  &:hover {
+    border: 1px solid #080808;
+  }
+}
+
+.ntld {
+  background-color: #e8a93f;
+}
+
+.idn {
+  background-color: #d64d61;
+}
+
+.privacy {
+  background-color: #fe72b2;
+  color: #080808;
+}
+
+.dnssec {
+  background-color: #ffdf00;
+}
+
+.ipv6 {
+  background-color: #1cc2ff;
+}
+
 h4 {
   margin: 1rem 0;
 }

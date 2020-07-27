@@ -4,26 +4,36 @@ import sm from './styles.modules.scss';
 
 const navbar = () => {
   return (
-    <div>
-      <nav className='navbar'>
-        <ol>
-          <li>
-            <h4>Title</h4>
-          </li>
-          <li>
-            <NavLink exact to='/'>
+    <nav className='navbar navbar-expand-lg sticky-top navbar-light navbar-main'>
+      <NavLink className='navbar-brand' exact to='/'>
+        Title
+      </NavLink>
+      <input type='checkbox' id='navbar-toggle-cbox'></input>
+      <label
+        htmlFor='navbar-toggle-cbox'
+        className='navbar-toggler navbar-toggler-icon hidden-sm-up'
+      />
+
+      <div className='navbar-collapse collapse' id='navbarSupportedContent'>
+        <ul className='navbar-nav'>
+          <li className='nav-item'>
+            <NavLink className='nav-link' exact to='/'>
               Prices
             </NavLink>
           </li>
-          <li>
-            <NavLink to='/domains'>Domains</NavLink>
+          <li className='nav-item'>
+            <NavLink className='nav-link' to='/domains'>
+              Domains
+            </NavLink>
           </li>
-          <li>
-            <NavLink to='/registrars'>Registrars</NavLink>
+          <li className='nav-item'>
+            <NavLink className='nav-link' to='/registrars'>
+              Registrars
+            </NavLink>
           </li>
-        </ol>
-      </nav>
-    </div>
+        </ul>
+      </div>
+    </nav>
   );
 };
 

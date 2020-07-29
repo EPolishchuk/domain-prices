@@ -5,6 +5,7 @@ const cors = require('cors');
 const app = express();
 
 const pool = require('./db');
+const getRates = require('./rates');
 
 app.use(cors());
 app.use(express.json());
@@ -30,7 +31,7 @@ app.get('/domains', async (req, res) => {
 app.get('/registrars', async (req, res) => {
   try {
     const allRegistrars = await pool.query(
-      'SELECT * FROM registrars WHERE (registrar_id != $1 AND registrar_id != $2)',
+      'SELECT name, url, currency_id FROM registrars WHERE (registrar_id != $1 AND registrar_id != $2)',
       ['uadns', 'nic']
     );
 
@@ -67,7 +68,7 @@ app.get('/full', async (req, res) => {
       ['uadns', 'nic', 'regnames']
     );
 
-    res.json(allPrices.rows);
+    res.json(normalize(allPrices.rows));
   } catch (error) {
     res.status(500).send({ error: "Couldn't get your data, sorry" });
     console.log(error.message);
@@ -83,14 +84,52 @@ app.get('/domain/:zone', async (req, res) => {
     d.core_ns, cc.contact_data as creator_data, ca.contact_data as admin_data,
     ct.contact_data as tech_data
     FROM domains d
-    inner join domain_contacts cc on cc.domain_contact_id = d.creator_id
-    inner join domain_contacts ca on ca.domain_contact_id = d.admin_id
-    inner join domain_contacts ct on ct.domain_contact_id = d.tech_id
+    LEFT join domain_contacts cc on cc.domain_contact_id = d.creator_id
+    LEFT join domain_contacts ca on ca.domain_contact_id = d.admin_id
+    LEFT join domain_contacts ct on ct.domain_contact_id = d.tech_id
     WHERE name=$1`,
       [req.params.zone]
     );
 
     res.json(domain.rows);
+  } catch (error) {
+    res.status(500).send({ error: "Couldn't get your data, sorry" });
+    console.log(error.message);
+  }
+});
+
+app.get('/registrar/:name', async (req, res) => {
+  try {
+    const domain = await pool.query(
+      'SELECT name, url, currency_id FROM registrars WHERE name=$1',
+      [req.params.name]
+    );
+
+    res.json(domain.rows);
+  } catch (error) {
+    res.status(500).send({ error: "Couldn't get your data, sorry" });
+    console.log(error.message);
+  }
+});
+
+// get currency rates
+app.get('/rates', async (req, res) => {
+  try {
+    const allRates = await pool.query('SELECT * FROM currency');
+
+    let result = allRates.rows;
+
+    if (Array.isArray(result) && result.length === 0) {
+      result = await getRates();
+    } else {
+      let usd = result.filter((el) => el.currency_id === 'USD')[0];
+      if (new Date() > new Date(usd.date)) {
+        await getRates();
+        result = await pool.query('SELECT * FROM currency');
+      }
+    }
+
+    res.json(allRates.rows);
   } catch (error) {
     res.status(500).send({ error: "Couldn't get your data, sorry" });
     console.log(error.message);
@@ -109,3 +148,21 @@ app.get('/:invalid', async (req, res) => {
 app.listen(5000, () => {
   console.log('server has started on port 5000');
 });
+
+const normalize = (prices) => {
+  let normalizedData = {};
+  normalizedData.names = [];
+
+  prices.map((el) => {
+    if (normalizedData.hasOwnProperty(el.domain)) {
+      normalizedData[el.domain].push(el);
+    } else {
+      normalizedData[el.domain] = [];
+      normalizedData.names.push(el.domain);
+      normalizedData[el.domain] = [];
+      normalizedData[el.domain].push(el);
+    }
+  });
+
+  return normalizedData;
+};

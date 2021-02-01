@@ -1,7 +1,7 @@
 require('dotenv').config({ path: '../.env.local' });
 
 const express = require('express');
-const pool = require('../db/db');
+const pool = require('../db/config');
 const router = express.Router();
 
 router.get('/registrars', async (req, res) => {

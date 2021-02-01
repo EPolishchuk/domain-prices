@@ -1,9 +1,11 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // Registrars
 const registrarRoutes = require('./routes/registrar');
@@ -16,6 +18,10 @@ app.use(domainRoutes);
 // Prices
 const priceRoutes = require('./routes/price');
 app.use(priceRoutes);
+
+// Admin Area
+//const authRoutes = require('./routes/auth');
+//app.use(authRoutes);
 
 //Errors
 app.get('/*', async (req, res) => {

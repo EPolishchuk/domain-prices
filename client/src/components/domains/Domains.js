@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
-import punycode from 'punycode';
+import punycode from 'punycode/';
 import Badge from './Badge';
 
 const Domains = () => {

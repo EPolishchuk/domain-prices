@@ -1,13 +1,16 @@
 require('dotenv').config({ path: '../.env.local' });
 
 const express = require('express');
-const pool = require('../db/db');
+const pool = require('../db/config');
 const router = express.Router();
 
 router.get('/domains', async (req, res) => {
   try {
     const allDomains = await pool.query(
-      'SELECT name, popular, newtld, gtld, cc, privacy, idn_support, dnssec_support, ipv6_support FROM domains ORDER BY name'
+      `SELECT name, popular, newtld, gtld, cc, privacy, idn_support, dnssec_support, ipv6_support 
+      FROM domains 
+      WHERE created IS NOT NULL
+      ORDER BY name`
     );
 
     res.json(allDomains.rows);

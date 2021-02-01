@@ -1,4 +1,5 @@
 import React from 'react';
+import sm from './style.module.scss';
 
 const styles = {
   nTLD: { style: 'ntld', desc: 'This is a new TLD zone' },
@@ -14,7 +15,7 @@ const styles = {
 const Badge = (props) => {
   return (
     <div
-      className={`btn badge ${styles[props.text].style}`}
+      className={`btn ${sm.badge} ${sm[styles[props.text].style]}`}
       title={styles[props.text].desc}
     >
       {props.text}

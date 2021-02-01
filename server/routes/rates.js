@@ -1,7 +1,7 @@
 require('dotenv').config({ path: '../.env.local' });
 
 const axios = require('axios');
-const pool = require('../db/db');
+const pool = require('../db/config');
 
 const MAIN_CURRENCY = ['EUR', 'USD', 'UAH'];
 const TODAY = `${new Date().getDate}.${new Date().getMonth + 1}.${

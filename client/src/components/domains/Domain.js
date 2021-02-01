@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Badge from './Badge';
-import sm from './styles.modules.scss';
-import punycode from 'punycode';
+import sm from './style.module.scss';
+import punycode from 'punycode/';
 
 const Domain = (props) => {
   const [domain, setDomain] = useState(0);
@@ -12,14 +12,20 @@ const Domain = (props) => {
       const res = await axios.get(
         `${process.env.REACT_APP_BASE}/${process.env.REACT_APP_DOMAIN}/${props.match.params.name}`
       );
-
-      setDomain(res.data[0]);
+      const result = res.data;
+      if (Array.isArray(result) && result.length === 0) {
+        setDomain(false);
+      } else {
+        setDomain(res.data[0]);
+      }
     };
 
     fetch();
-  }, []);
+  }, [props.match.params.name]);
 
-  if (typeof domain !== 'object' || domain === null) {
+  if (domain === false) {
+    return <h2>This domain doesn't exist.</h2>;
+  } else if (typeof domain !== 'object' || domain === null) {
     return <h2>Loading...</h2>;
   } else
     return (

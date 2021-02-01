@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import punycode from 'punycode';
 
 const Registrar = (props) => {
   const [registrar, setRegistrar] = useState(0);
@@ -15,7 +14,7 @@ const Registrar = (props) => {
     };
 
     fetch();
-  }, []);
+  }, [props.match.params.name]);
 
   if (typeof registrar !== 'object' || registrar === null) {
     return <h2>Loading...</h2>;
